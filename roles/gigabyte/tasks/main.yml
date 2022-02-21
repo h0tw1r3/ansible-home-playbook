@@ -1,0 +1,15 @@
+---
+- name: install packages
+  package:
+    name: lm-sensors
+    state: present
+- name: kernel modules
+  ansible.builtin.copy:
+    dest: /etc/modules-load.d/gigabyte_sensors.conf
+    content: "{{ gigabyte_modules | join('\n') }}"
+  notify: load modules
+- name: configure sensors
+  ansible.posix.synchronize:
+    src: roles/gigabyte/files/sensors/gigabyte.conf
+    dest: /etc/sensors.d/gigabyte.conf
+  notify: update sensors

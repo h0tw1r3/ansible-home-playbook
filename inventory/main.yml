@@ -1,0 +1,31 @@
+---
+vm_servers:
+  hosts:
+    vm0:
+  vars:
+    ansible_user: root
+    ansible_password: !vault |
+              $ANSIBLE_VAULT;1.1;AES256
+              61313561316430633032646439643033616133643936633830663439633931393664356336616538
+              3231383831356164303635363030316235323832313765640a636432396233653336333163303862
+              64333465656663613161376637323664646263356263343832646232326266303635346137663933
+              3864633463306265650a356665386435633931623862363330306366373633643430376161613539
+              3735
+    grub_options:
+      - option: acpi_enforce_resources
+        value: 'lax'
+      - option: amd_iommu
+        value: 'on'
+      - option: iommu
+        value: 'pt'
+      - option: mitigations
+        value: 'off'
+      - option: consoleblank
+        value: '300'
+    modules:
+      - overlay
+      - aufs
+
+home:
+  children:
+    vm_servers:

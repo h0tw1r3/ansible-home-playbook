@@ -1,0 +1,12 @@
+---
+- name: update sensors
+  ansible.builtin.command: /usr/bin/sensors -s
+
+- name: load modules
+  ansible.builtin.command: /usr/sbin/modprobe "{{ item }}"
+  loop: "{{ gigabyte_modules }}"
+  register: loopresult
+
+- name: load module result
+  debug:
+    var: loopresult

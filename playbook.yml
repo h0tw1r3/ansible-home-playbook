@@ -1,0 +1,9 @@
+- hosts: all
+  roles:
+    - base
+    - sudo
+    - robertdebock.grub
+- hosts: vm_servers
+  roles:
+    - proxmox
+    - gigabyte

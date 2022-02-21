@@ -1,0 +1,18 @@
+---
+- name: apt repo keys
+  apt_key:
+    url: "{{ item.url }}"
+    id: "{{ item.id }}"
+    state: "{{ item.state | default('present') }}"
+  loop: "{{ proxmox_apt_keys }}"
+- name: apt repos
+  apt_repository:
+    repo: "{{ item.value.repo }}"
+    filename: "{{ item.key }}.list"
+    state: "{{ item.value.state | default('present')}}"
+  loop: "{{ lookup('dict', proxmox_apt_repositories, wantlist=True) | default({}) }}"
+- name: install packages
+  package:
+    name: "{{ item.value }}"
+    state: "{{ proxmox_package_state }}"
+  loop: "{{ (proxmox_packages | default({})) | dict2items }}"

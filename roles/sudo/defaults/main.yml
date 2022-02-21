@@ -1,0 +1,27 @@
+---
+sudo_package_name: sudo
+sudo_package_state: present
+
+sudo_includedir: /etc/sudoers.d
+
+sudo_default_rules:
+  - name: root
+    hosts: ALL
+    runas:
+      users: ALL
+      groups: ALL
+    commands: ALL
+  - name: '%sudo'
+    hosts: ALL
+    runas:
+      users: ALL
+      groups: ALL
+    commands: ALL
+
+sudo_aliases: {}
+sudo_rules: []
+sudo_rules_raw: []
+sudo_defaults:
+  - env_reset
+  - mail_badpass
+  - secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"

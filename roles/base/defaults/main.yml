@@ -1,0 +1,36 @@
+---
+base_apt_keys:
+  - https://apt.releases.hashicorp.com/gpg
+
+base_apt_repositories:
+  hashicorp:
+    repo: "deb [arch=amd64] https://apt.releases.hashicorp.com {{ ansible_distribution_release | lower }} main"
+
+base_package_state: present
+base_packages:
+  os:
+    - apt-transport-https
+  editors:
+    - vim-nox
+  network:
+    - curl
+    - tcpdump
+    - socat
+    - smem
+    - mtr
+  misc:
+    - tmux
+    - moreutils
+  utils:
+    - pixz
+    - pigz
+    - pv
+    - iftop
+    - iotop
+    - htop
+  parse:
+    - jq
+    - crudini
+    - xmlstarlet
+  python:
+    - python3-pip

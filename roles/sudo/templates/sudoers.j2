@@ -1,0 +1,62 @@
+{%- macro render_list(v) -%}
+{% if v is string -%}
+{{ v }}
+{%- elif v is sequence %}
+{{ v | join(', ') }}
+{%- endif %}
+{%- endmacro -%}
+
+{%- macro render_tags(v) -%}
+{% if v is defined and v is sequence and v | length -%}
+{{ render_list(v) }}:
+{%- endif %}
+{%- endmacro -%}
+
+{%- macro render_runas(v) -%}
+{% if v is string -%}
+{{ v }}
+{%- elif v is mapping %}
+{% if "users" in v -%}
+{{ render_list(v["users"]) }}
+{%- endif -%}
+{% if "groups" in v %}
+:{{ render_list(v["groups"]) }}
+{%- endif %}
+{%- endif %}
+{%- endmacro -%}
+
+# {{ ansible_managed }}
+
+{% if sudo_aliases is defined and sudo_aliases is mapping -%}
+{% for type, aliases in sudo_aliases | dictsort %}
+{% for alias in aliases | sort(attribute='name') %}
+{{ type | capitalize }}_Alias {{ alias.name | upper }} = {{ render_list(alias["items"]) }}
+{% endfor %}
+{% endfor %}
+{%- endif %}
+
+{% if sudo_defaults is defined and sudo_defaults is sequence and sudo_defaults | length -%}
+# Defaults
+{% for default in sudo_defaults %}
+Defaults {{ default }}
+{% endfor %}
+{%- endif %}
+
+{% for rule in sudo_default_rules %}
+{{ render_list(rule.name) }} {{ render_list(rule.hosts | default("ALL")) }} = ({{ render_runas(rule.runas | default("ALL")) }}) {{ render_tags(rule.tags) }} {{ render_list(rules.commands | default("ALL")) }}
+{% endfor %}
+
+{% for rule in sudo_rules %}
+{{ render_list(rule.name) }} {{ render_list(rule.hosts | default("ALL")) }} = ({{ render_runas(rule.runas | default("ALL")) }}) {{ render_tags(rule.tags) }} {{ render_list(rules.commands | default("ALL")) }}
+{% endfor %}
+
+{%- if sudo_rules_raw is defined and sudo_rules_raw is sequence and sudo_rules_raw | length -%}
+# Raw rules
+{% for rule in sudo_rules_raw %}
+{{ rule }}
+{% endfor %}
+{%- endif %}
+
+{% if sudo_includedir is defined %}
+#includedir {{ sudo_includedir }}
+{% endif %}

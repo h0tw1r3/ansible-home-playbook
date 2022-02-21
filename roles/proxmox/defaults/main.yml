@@ -1,0 +1,13 @@
+---
+proxmox_apt_keys:
+  - url: "https://enterprise.proxmox.com/debian/proxmox-release-{{ ansible_distribution_release | lower }}.gpg"
+    id: "28139A2F830BD68478A1A01FDD4BA3917E23BF59"
+
+proxmox_apt_repositories:
+  pve-enterprise:
+    repo: "deb http://download.proxmox.com/debian/pve {{ ansible_distribution_release | lower }} pvetest"
+
+proxmox_package_state: present
+proxmox_packages:
+  util:
+    - skopeo

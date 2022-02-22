@@ -11,3 +11,20 @@ proxmox_package_state: present
 proxmox_packages:
   util:
     - skopeo
+
+proxmox_sysctl_config:
+  kernel.dmesg_restrict: 0
+  kernel.pid_max: 100000
+  user.max_user_namespaces: 150000
+  vm.compact_memory: 1
+  vm.overcommit_memory: 1
+  net.bridge.bridge-nf-call-iptables: 1
+
+proxmox_modules:
+  - fuse
+  - ip_vs
+  - ip_vs_rr
+  - ip_vs_wrr
+  - ip_vs_sh
+  - br_netfilter
+  - iptable_nat

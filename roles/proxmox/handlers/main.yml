@@ -1,0 +1,9 @@
+---
+- name: load modules
+  ansible.builtin.command: /usr/sbin/modprobe "{{ item }}"
+  loop: "{{ proxmox_modules }}"
+  register: loopresult
+
+- name: load module result
+  debug:
+    var: loopresult
